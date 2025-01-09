@@ -31,6 +31,7 @@ export async function generateContentStream(
   model: string,
   params: GenerateContentRequest,
   requestOptions: SingleRequestOptions,
+  fetchFn = fetch,
 ): Promise<GenerateContentStreamResult> {
   const response = await makeModelRequest(
     model,
@@ -39,6 +40,7 @@ export async function generateContentStream(
     /* stream */ true,
     JSON.stringify(params),
     requestOptions,
+    fetchFn,
   );
   return processStream(response);
 }
@@ -48,6 +50,7 @@ export async function generateContent(
   model: string,
   params: GenerateContentRequest,
   requestOptions?: SingleRequestOptions,
+  fetchFn = fetch,
 ): Promise<GenerateContentResult> {
   const response = await makeModelRequest(
     model,
@@ -56,6 +59,7 @@ export async function generateContent(
     /* stream */ false,
     JSON.stringify(params),
     requestOptions,
+    fetchFn,
   );
   const responseJson: GenerateContentResponse = await response.json();
   const enhancedResponse = addHelpers(responseJson);
